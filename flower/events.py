@@ -35,6 +35,10 @@ class EventsState(State):
         if cls:
             cls.send_message(event)
 
+        # Send all events to generic handler
+        if event['type'] not in api.events.AllEventsApiHandler.blacklist:
+            api.events.AllEventsApiHandler.send_message(event)
+
         # Save the event
         super(EventsState, self).event(event)
 

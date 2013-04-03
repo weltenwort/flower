@@ -17,6 +17,11 @@ class EventsApiHandler(BaseWebSocketHandler):
                 l.write_message(event)
 
 
+class AllEventsApiHandler(BaseWebSocketHandler):
+    listeners = []
+    blacklist = ['worker-heartbeat', ]
+
+
 EVENTS = ('task-sent', 'task-received', 'task-started', 'task-succeeded',
           'task-failed', 'task-revoked', 'task-retried')
 
@@ -35,3 +40,4 @@ for event in EVENTS:
 
 __all__ = map(getClassName, EVENTS)
 __all__.append(getClassName)
+__all__.append(AllEventsApiHandler)

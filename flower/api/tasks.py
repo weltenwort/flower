@@ -52,10 +52,12 @@ class TaskAsyncApply(BaseTaskHandler):
 class TaskResult(BaseTaskHandler):
     @web.authenticated
     def get(self, taskid):
+        response = self.application.events.state.tasks.get(taskid)
+        response = dict(response) if response is not None else {}
         result = AsyncResult(taskid)
         if not self.backend_configured(result):
             raise HTTPError(503)
-        response = {'task-id': taskid, 'state': result.state}
+        response.update({'task-id': taskid, 'state': result.state})
         if result.ready():
             if result.state == states.FAILURE:
                 response.update({'result': repr(result.result),
